@@ -61,8 +61,6 @@ impl<S, H> PrecompileSet<S, H> for () {
 	}
 }
 
-/// The standard code resolver where the color is an [Etable]. This is usually
-/// what you need.
 pub struct EtableResolver<'config, 'precompile, 'etable, Pre, ES> {
 	config: &'config Config,
 	etable: &'etable ES,

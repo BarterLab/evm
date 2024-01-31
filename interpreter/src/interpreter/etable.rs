@@ -161,7 +161,9 @@ where
 					return Err(Capture::Exit(ExitException::InvalidJump.into()));
 				}
 			}
-			Control::Trap(opcode) => return Err(Capture::Trap(opcode)),
+			Control::Trap(opcode) => {
+				return Err(Capture::Trap(opcode));
+			}
 		};
 
 		if self.position >= self.code.len() {

@@ -29,6 +29,7 @@ pub type Efn<'config, H> = crate::Efn<State<'config>, H, crate::trap::CallCreate
 pub type Etable<'config, H, F = Efn<'config, H>> =
 	crate::Etable<State<'config>, H, crate::trap::CallCreateTrap, F>;
 
+#[derive(Clone)]
 pub struct State<'config> {
 	pub runtime: RuntimeState,
 	pub gasometer: GasometerState<'config>,

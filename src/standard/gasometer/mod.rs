@@ -11,6 +11,7 @@ use alloc::vec::Vec;
 use core::cmp::{max, min};
 use primitive_types::{H160, H256, U256};
 
+#[derive(Clone)]
 pub struct GasometerState<'config> {
 	gas_limit: u64,
 	memory_gas: u64,
