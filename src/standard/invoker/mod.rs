@@ -45,6 +45,7 @@ pub enum SubstackInvoke {
 }
 
 /// Return value of a transaction.
+#[derive(Debug)]
 pub enum TransactValue {
 	Call {
 		/// The exit result. If we return a value, then it will be an
