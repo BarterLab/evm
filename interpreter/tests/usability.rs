@@ -119,7 +119,7 @@ impl RuntimeBaseBackend for UnimplementedHandler {
 }
 
 impl RuntimeBackend for UnimplementedHandler {
-	fn original_storage(&self, _address: H160, _index: H256) -> H256 {
+	fn original_storage(&mut self, _address: H160, _index: H256) -> H256 {
 		unimplemented!()
 	}
 

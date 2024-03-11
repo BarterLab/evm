@@ -15,32 +15,22 @@ keywords = { workspace = true }
 description = "Ethereum Virtual Machine"
 
 [dependencies]
-primitive-types = { version = "0.12", default-features = false, features = ["rlp"] }
+primitive-types = { version = "0.12", default-features = false, features = [
+	"rlp",
+] }
 sha3 = { version = "0.10", default-features = false }
 
 evm-interpreter = { version = "1.0.0-dev", path = "interpreter", default-features = false }
 
 [features]
 default = ["std"]
-std = [
-	"primitive-types/std",
-	"sha3/std",
-	"evm-interpreter/std",
-]
+std = ["primitive-types/std", "sha3/std", "evm-interpreter/std"]
 with-codec = [
 	"primitive-types/codec",
 	"primitive-types/scale-info",
 	"evm-interpreter/with-codec",
 ]
-with-serde = [
-	"primitive-types/impl-serde",
-	"evm-interpreter/with-serde",
-]
+with-serde = ["primitive-types/impl-serde", "evm-interpreter/with-serde"]
 
 [workspace]
-members = [
-	"interpreter",
-	"jsontests",
-	"precompile",
-	"tracer",
-]
+members = ["interpreter", "precompile", "tracer"]

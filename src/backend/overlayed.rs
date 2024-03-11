@@ -99,7 +99,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 		}
 	}
 
-	fn code(&self, address: H160) -> Vec<u8> {
+	fn code(&mut self, address: H160) -> Vec<u8> {
 		if let Some(code) = self.substate.known_code(address) {
 			code
 		} else {
@@ -107,7 +107,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 		}
 	}
 
-	fn storage(&self, address: H160, index: H256) -> H256 {
+	fn storage(&mut self, address: H160, index: H256) -> H256 {
 		if let Some(value) = self.substate.known_storage(address, index) {
 			value
 		} else {
@@ -133,7 +133,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 }
 
 impl<B: RuntimeBaseBackend> RuntimeBackend for OverlayedBackend<B> {
-	fn original_storage(&self, address: H160, index: H256) -> H256 {
+	fn original_storage(&mut self, address: H160, index: H256) -> H256 {
 		self.backend.storage(address, index)
 	}
 

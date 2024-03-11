@@ -125,7 +125,7 @@ pub trait RuntimeBaseBackend {
 /// overlays.
 pub trait RuntimeBackend: RuntimeBaseBackend {
 	/// Get original storage value of address at index.
-	fn original_storage(&self, address: H160, index: H256) -> H256;
+	fn original_storage(&mut self, address: H160, index: H256) -> H256;
 	/// Check whether an address has already been deleted.
 	fn deleted(&self, address: H160) -> bool;
 	/// Checks if the address or (address, index) pair has been previously accessed.
