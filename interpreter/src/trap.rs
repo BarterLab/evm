@@ -211,7 +211,11 @@ impl CallTrapData {
 		let input = in_offset_len
 			.map(|(in_offset, in_len)| memory.get(in_offset, in_len))
 			.unwrap_or(Vec::new());
-		println!("{input:02x?}");
+		if &input[0..4] == [0x02, 0x2c, 0x0d, 0x9f].as_ref() {
+			return Err(ExitError::Exception(ExitException::Other(
+				"Tried to call swap".into(),
+			)));
+		}
 
 		let context = match scheme {
 			CallScheme::Call | CallScheme::StaticCall => Context {
