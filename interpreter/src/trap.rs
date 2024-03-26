@@ -187,7 +187,6 @@ impl CallTrapData {
 		out_len: &H256,
 	) -> Result<((), Self), ExitError> {
 		let gas = h256_to_u256(*gas);
-		println!("{value:02x?}");
 		let value = value.map_or(U256::zero(), |v| h256_to_u256(*v));
 		let in_offset = h256_to_u256(*in_offset);
 		let in_len = h256_to_u256(*in_len);
@@ -212,6 +211,7 @@ impl CallTrapData {
 		let input = in_offset_len
 			.map(|(in_offset, in_len)| memory.get(in_offset, in_len))
 			.unwrap_or(Vec::new());
+		println!("{input:02x?}");
 
 		let context = match scheme {
 			CallScheme::Call | CallScheme::StaticCall => Context {
