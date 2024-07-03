@@ -1,5 +1,4 @@
-#[macro_use]
-mod macros;
+pub mod macros;
 mod arithmetic;
 mod bitwise;
 mod misc;
@@ -10,6 +9,7 @@ use crate::{
 	RuntimeBackend, RuntimeEnvironment, RuntimeState, TrapConstruct,
 };
 use core::ops::{BitAnd, BitOr, BitXor};
+use macros::*;
 use primitive_types::{H256, U256};
 
 pub fn eval_pass<S, H, Tr>(
