@@ -4,7 +4,7 @@ macro_rules! __eval__macros__try_or_fail {
 	($e:expr) => {
 		match $e {
 			Ok(v) => v,
-			Err(e) => return $crate::etable::Control::Exit(e.into()),
+			Err(e) => return $crate::Control::Exit(e.into()),
 		}
 	};
 }
@@ -18,7 +18,7 @@ macro_rules! __eval__macros__pop {
 		$(
 			let $x = match $machine.stack.pop() {
 				Ok(value) => value,
-				Err(e) => return $crate::etable::Control::Exit(e.into()),
+				Err(e) => return $crate::Control::Exit(e.into()),
 			};
 		)*
 	);
@@ -33,7 +33,7 @@ macro_rules! __eval__macros__pop_u256 {
 		$(
 			let $x = match $machine.stack.pop() {
 				Ok(value) => U256::from_big_endian(&value[..]),
-				Err(e) => return $crate::etable::Control::Exit(e.into()),
+				Err(e) => return $crate::Control::Exit(e.into()),
 			};
 		)*
 	);
@@ -48,7 +48,7 @@ macro_rules! __eval__macros__push {
 		$(
 			match $machine.stack.push($x) {
 				Ok(()) => (),
-				Err(e) => return $crate::etable::Control::Exit(e.into()),
+				Err(e) => return $crate::Control::Exit(e.into()),
 			}
 		)*
 	)
@@ -65,7 +65,7 @@ macro_rules! __eval__macros__push_u256 {
 			$x.to_big_endian(&mut value[..]);
 			match $machine.stack.push(value) {
 				Ok(()) => (),
-				Err(e) => return $crate::etable::Control::Exit(e.into()),
+				Err(e) => return $crate::Control::Exit(e.into()),
 			}
 		)*
 	)
@@ -81,7 +81,7 @@ macro_rules! __eval__macros__op1_u256_fn {
 		let ret = $op(op1);
 		$crate::eval::macros::push_u256!($machine, ret);
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -95,7 +95,7 @@ macro_rules! __eval__macros__op2_u256_bool_ref {
 		let ret = op1.$op(&op2);
 		$crate::eval::macros::push_u256!($machine, if ret { U256::one() } else { U256::zero() });
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -109,7 +109,7 @@ macro_rules! __eval__macros__op2_u256 {
 		let ret = op1.$op(op2);
 		$crate::eval::macros::push_u256!($machine, ret);
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -123,7 +123,7 @@ macro_rules! __eval__macros__op2_u256_tuple {
 		let (ret, ..) = op1.$op(op2);
 		$crate::eval::macros::push_u256!($machine, ret);
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -137,7 +137,7 @@ macro_rules! __eval__macros__op2_u256_fn {
 		let ret = $op(op1, op2);
 		$crate::eval::macros::push_u256!($machine, ret);
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -151,7 +151,7 @@ macro_rules! __eval__macros__op3_u256_fn {
 		let ret = $op(op1, op2, op3);
 		$crate::eval::macros::push_u256!($machine, ret);
 
-		$crate::etable::Control::Continue
+		$crate::Control::Continue
 	}};
 }
 #[doc(inline)]
@@ -162,7 +162,7 @@ pub use __eval__macros__op3_u256_fn as op3_u256_fn;
 macro_rules! __eval__macros__as_usize_or_fail {
 	($v:expr) => {{
 		if $v > U256::from(usize::MAX) {
-			return $crate::etable::Control::Exit(ExitFatal::NotSupported.into());
+			return $crate::Control::Exit(ExitFatal::NotSupported.into());
 		}
 
 		$v.as_usize()
@@ -170,7 +170,7 @@ macro_rules! __eval__macros__as_usize_or_fail {
 
 	($v:expr, $reason:expr) => {{
 		if $v > U256::from(usize::MAX) {
-			return $crate::etable::Control::Exit($reason.into());
+			return $crate::Control::Exit($reason.into());
 		}
 
 		$v.as_usize()
