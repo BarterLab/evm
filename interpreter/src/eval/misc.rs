@@ -1,3 +1,4 @@
+use super::macros::*;
 use super::Control;
 use crate::utils::u256_to_h256;
 use crate::{ExitError, ExitException, ExitFatal, ExitSucceed, Machine};

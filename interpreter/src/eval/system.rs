@@ -1,3 +1,4 @@
+use super::macros::*;
 use super::Control;
 use crate::{
 	ExitException, ExitFatal, ExitSucceed, GasState, Log, Machine, RuntimeBackend,
