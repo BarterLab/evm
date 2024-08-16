@@ -50,6 +50,22 @@ impl<B> OverlayedBackend<B> {
 			},
 		)
 	}
+
+	pub fn full_deconstruct(self) -> (B, OverlayedChangeSet, BTreeSet<(H160, Option<H256>)>) {
+		(
+			self.backend,
+			OverlayedChangeSet {
+				logs: self.substate.logs,
+				balances: self.substate.balances,
+				codes: self.substate.codes,
+				nonces: self.substate.nonces,
+				storage_resets: self.substate.storage_resets,
+				storages: self.substate.storages,
+				deletes: self.substate.deletes,
+			},
+			self.accessed,
+		)
+	}
 }
 
 impl<B: RuntimeEnvironment> RuntimeEnvironment for OverlayedBackend<B> {
