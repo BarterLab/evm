@@ -55,6 +55,23 @@ impl<B> OverlayedBackend<B> {
 			},
 		)
 	}
+
+	pub fn full_deconstruct(self) -> (B, OverlayedChangeSet, BTreeSet<(H160, Option<H256>)>) {
+		(
+			self.backend,
+			OverlayedChangeSet {
+				logs: self.substate.logs,
+				balances: self.substate.balances,
+				codes: self.substate.codes,
+				nonces: self.substate.nonces,
+				storage_resets: self.substate.storage_resets,
+				storages: self.substate.storages,
+				transient_storage: self.substate.transient_storage,
+				deletes: self.substate.deletes,
+			},
+			self.accessed,
+		)
+	}
 }
 
 impl<B: RuntimeEnvironment> RuntimeEnvironment for OverlayedBackend<B> {
@@ -104,7 +121,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 		}
 	}
 
-	fn code(&self, address: H160) -> Vec<u8> {
+	fn code(&mut self, address: H160) -> Vec<u8> {
 		if let Some(code) = self.substate.known_code(address) {
 			code
 		} else {
@@ -112,7 +129,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 		}
 	}
 
-	fn storage(&self, address: H160, index: H256) -> H256 {
+	fn storage(&mut self, address: H160, index: H256) -> H256 {
 		if let Some(value) = self.substate.known_storage(address, index) {
 			value
 		} else {
@@ -120,7 +137,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 		}
 	}
 
-	fn transient_storage(&self, address: H160, index: H256) -> H256 {
+	fn transient_storage(&mut self, address: H160, index: H256) -> H256 {
 		if let Some(value) = self.substate.known_transient_storage(address, index) {
 			value
 		} else {
@@ -146,7 +163,7 @@ impl<B: RuntimeBaseBackend> RuntimeBaseBackend for OverlayedBackend<B> {
 }
 
 impl<B: RuntimeBaseBackend> RuntimeBackend for OverlayedBackend<B> {
-	fn original_storage(&self, address: H160, index: H256) -> H256 {
+	fn original_storage(&mut self, address: H160, index: H256) -> H256 {
 		self.backend.storage(address, index)
 	}
 

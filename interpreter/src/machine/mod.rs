@@ -42,6 +42,12 @@ impl<S> Machine<S> {
 		}
 	}
 
+	/// Machine calldata.
+
+	pub fn data(&self) -> &Rc<Vec<u8>> {
+		&self.data
+	}
+
 	/// Machine code.
 	pub fn code(&self) -> &[u8] {
 		&self.code

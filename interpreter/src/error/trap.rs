@@ -93,7 +93,7 @@ impl CallCreateTrapData {
 		}
 	}
 
-	pub fn code<H: RuntimeBackend>(&self, handler: &H) -> Vec<u8> {
+	pub fn code<H: RuntimeBackend>(&self, handler: &mut H) -> Vec<u8> {
 		match self {
 			Self::Call(trap) => handler.code(trap.target),
 			Self::Create(trap) => trap.code.clone(),

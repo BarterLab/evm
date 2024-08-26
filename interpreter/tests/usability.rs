@@ -102,19 +102,19 @@ impl RuntimeBaseBackend for UnimplementedHandler {
 	fn balance(&self, _address: H160) -> U256 {
 		unimplemented!()
 	}
-	fn code_size(&self, _address: H160) -> U256 {
+	fn code_size(&mut self, _address: H160) -> U256 {
 		unimplemented!()
 	}
-	fn code_hash(&self, _address: H160) -> H256 {
+	fn code_hash(&mut self, _address: H160) -> H256 {
 		unimplemented!()
 	}
-	fn code(&self, _address: H160) -> Vec<u8> {
+	fn code(&mut self, _address: H160) -> Vec<u8> {
 		unimplemented!()
 	}
-	fn storage(&self, _address: H160, _index: H256) -> H256 {
+	fn storage(&mut self, _address: H160, _index: H256) -> H256 {
 		unimplemented!()
 	}
-	fn transient_storage(&self, _address: H160, _index: H256) -> H256 {
+	fn transient_storage(&mut self, _address: H160, _index: H256) -> H256 {
 		unimplemented!()
 	}
 
@@ -128,7 +128,7 @@ impl RuntimeBaseBackend for UnimplementedHandler {
 }
 
 impl RuntimeBackend for UnimplementedHandler {
-	fn original_storage(&self, _address: H160, _index: H256) -> H256 {
+	fn original_storage(&mut self, _address: H160, _index: H256) -> H256 {
 		unimplemented!()
 	}
 

@@ -37,6 +37,7 @@ pub type Efn<'config, H> = etable::Efn<State<'config>, H, CallCreateTrap>;
 pub type Etable<'config, H, F = Efn<'config, H>> =
 	etable::Etable<State<'config>, H, CallCreateTrap, F>;
 
+#[derive(Clone)]
 pub struct State<'config> {
 	pub runtime: RuntimeState,
 	pub gasometer: GasometerState<'config>,

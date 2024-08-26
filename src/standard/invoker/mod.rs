@@ -38,6 +38,7 @@ pub trait IntoCallCreateTrap {
 	type Interrupt;
 
 	/// Turn the current trap into either a call/create trap or an interrupt.
+	#[allow(dead_code)] // FIXME: unused privated trait
 	fn into_call_create_trap(self) -> Result<Opcode, Self::Interrupt>;
 }
 
@@ -56,6 +57,7 @@ pub enum SubstackInvoke {
 }
 
 /// Return value of a transaction.
+#[derive(Debug)]
 pub enum TransactValue {
 	Call {
 		/// The exit result. If we return a value, then it will be an

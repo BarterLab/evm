@@ -16,6 +16,8 @@ use primitive_types::{H160, H256, U256};
 
 use crate::{standard::Config, MergeStrategy};
 
+
+#[derive(Clone)]
 pub struct GasometerState<'config> {
 	gas_limit: u64,
 	memory_gas: u64,
