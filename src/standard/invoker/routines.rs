@@ -1,11 +1,18 @@
-use super::{CallTrapData, CreateTrapData, InvokerState, Resolver, SubstackInvoke};
-use crate::standard::Config;
-use crate::{
-	ExitError, ExitException, ExitResult, InvokerControl, MergeStrategy, Opcode, RuntimeBackend,
-	RuntimeEnvironment, RuntimeState, TransactionalBackend, Transfer,
-};
 use alloc::vec::Vec;
+
+use evm_interpreter::{
+	error::{CallTrapData, CreateTrapData, ExitError, ExitException, ExitResult},
+	opcode::Opcode,
+	runtime::{RuntimeBackend, RuntimeEnvironment, RuntimeState, SetCodeOrigin, Transfer},
+};
 use primitive_types::{H160, U256};
+
+use crate::{
+	backend::TransactionalBackend,
+	invoker::InvokerControl,
+	standard::{Config, InvokerState, Resolver, SubstackInvoke},
+	MergeStrategy,
+};
 
 #[allow(clippy::too_many_arguments, clippy::type_complexity)]
 pub fn make_enter_call_machine<H, R>(
@@ -190,6 +197,7 @@ pub fn deploy_create_code<'config, S, H>(
 	retbuf: Vec<u8>,
 	state: &mut S,
 	handler: &mut H,
+	origin: SetCodeOrigin,
 ) -> Result<(), ExitError>
 where
 	S: InvokerState<'config>,
@@ -205,7 +213,7 @@ where
 
 	state.record_codedeposit(retbuf.len())?;
 
-	handler.set_code(address, retbuf)?;
+	handler.set_code(address, retbuf, origin)?;
 
 	Ok(())
 }

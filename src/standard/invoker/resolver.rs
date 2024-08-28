@@ -1,10 +1,15 @@
-use crate::interpreter::{EtableInterpreter, Interpreter};
-use crate::{
-	standard::Config, EtableSet, ExitError, ExitResult, InvokerControl, Machine, RuntimeBackend,
-	RuntimeState,
-};
 use alloc::{rc::Rc, vec::Vec};
+
+use evm_interpreter::{
+	error::{ExitError, ExitResult},
+	etable::EtableSet,
+	machine::Machine,
+	runtime::{RuntimeBackend, RuntimeState},
+	EtableInterpreter, Interpreter,
+};
 use primitive_types::H160;
+
+use crate::{invoker::InvokerControl, standard::Config};
 
 /// A code resolver.
 ///
@@ -61,6 +66,8 @@ impl<S, H> PrecompileSet<S, H> for () {
 	}
 }
 
+/// The standard code resolver where the color is an [Etable]. This is usually
+/// what you need.
 pub struct EtableResolver<'config, 'precompile, 'etable, Pre, ES> {
 	config: &'config Config,
 	etable: &'etable ES,

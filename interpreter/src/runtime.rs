@@ -1,8 +1,9 @@
-use crate::ExitError;
-use alloc::rc::Rc;
-use alloc::vec::Vec;
+use alloc::{rc::Rc, vec::Vec};
+
 use primitive_types::{H160, H256, U256};
 use sha3::{Digest, Keccak256};
+
+use crate::error::ExitError;
 
 /// Gas state.
 pub trait GasState {
@@ -14,6 +15,7 @@ pub trait GasState {
 pub struct RuntimeState {
 	/// Runtime context.
 	pub context: Context,
+	/// Transaction context.
 	pub transaction_context: Rc<TransactionContext>,
 	/// Return data buffer.
 	pub retbuf: Vec<u8>,
@@ -75,6 +77,13 @@ pub struct Log {
 	pub data: Vec<u8>,
 }
 
+// Identify if the origin of set_code() comes from a transact or subcall.
+#[derive(Clone, Debug)]
+pub enum SetCodeOrigin {
+	Transaction,
+	Subcall(H160),
+}
+
 #[auto_impl::auto_impl(&, Box)]
 pub trait RuntimeEnvironment {
 	/// Get environmental block hash.
@@ -113,6 +122,8 @@ pub trait RuntimeBaseBackend {
 	fn code(&mut self, address: H160) -> Vec<u8>;
 	/// Get storage value of address at index.
 	fn storage(&mut self, address: H160, index: H256) -> H256;
+	/// Get transient storage value of address at index.
+	fn transient_storage(&mut self, address: H160, index: H256) -> H256;
 
 	/// Check whether an address exists.
 	fn exists(&self, address: H160) -> bool;
@@ -138,6 +149,13 @@ pub trait RuntimeBackend: RuntimeBaseBackend {
 	fn mark_hot(&mut self, address: H160, index: Option<H256>);
 	/// Set storage value of address at index.
 	fn set_storage(&mut self, address: H160, index: H256, value: H256) -> Result<(), ExitError>;
+	/// Set transient storage value of address at index, transient storage gets discarded after every transaction. (see EIP-1153)
+	fn set_transient_storage(
+		&mut self,
+		address: H160,
+		index: H256,
+		value: H256,
+	) -> Result<(), ExitError>;
 	/// Create a log owned by address with given topics and data.
 	fn log(&mut self, log: Log) -> Result<(), ExitError>;
 	/// Mark an address to be deleted.
@@ -145,7 +163,12 @@ pub trait RuntimeBackend: RuntimeBaseBackend {
 	/// Fully delete storages of an account.
 	fn reset_storage(&mut self, address: H160);
 	/// Set code of an account.
-	fn set_code(&mut self, address: H160, code: Vec<u8>) -> Result<(), ExitError>;
+	fn set_code(
+		&mut self,
+		address: H160,
+		code: Vec<u8>,
+		origin: SetCodeOrigin,
+	) -> Result<(), ExitError>;
 	/// Reset balance of an account.
 	fn reset_balance(&mut self, address: H160);
 	fn deposit(&mut self, target: H160, value: U256);
