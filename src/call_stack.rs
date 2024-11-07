@@ -426,6 +426,16 @@ where
 			_ => None,
 		}
 	}
+
+	/// The backend used to execute this call stack. This will be `None` if
+	/// the heap stack has already exited. Not part of evm repository.
+	pub fn backend(&mut self) -> Option<&mut H> {
+		match &mut self.0 {
+			Some(HeapTransactState::Created { backend, .. }) => Some(backend),
+			Some(HeapTransactState::Running { call_stack, .. }) => Some(&mut call_stack.backend),
+			None => None,
+		}
+	}
 }
 
 impl<'backend, 'invoker, H, Tr, I> HeapTransact<'backend, 'invoker, H, Tr, I>
